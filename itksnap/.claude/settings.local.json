@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:itksnap-dls.readthedocs.io)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(pip install --target /tmp/itksnap-dls-src --no-deps itksnap-dls)",
+      "Bash(gh api:*)",
+      "Bash(git clone:*)",
+      "Bash(mv itksnap:*)"
+    ]
+  }
+}

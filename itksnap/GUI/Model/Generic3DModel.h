@@ -1,0 +1,231 @@
+#ifndef GENERIC3DMODEL_H
+#define GENERIC3DMODEL_H
+
+#include "AbstractModel.h"
+#include "PropertyModel.h"
+#include "vtkSmartPointer.h"
+#include "SNAPEvents.h"
+#include <mutex>
+
+class GlobalUIModel;
+class IRISApplication;
+class MeshManager;
+class Generic3DRenderer;
+class vtkPolyData;
+class MeshExportSettings;
+class ImageMeshLayers;
+
+namespace itk
+{
+class Command;
+}
+
+class Generic3DModel : public AbstractModel
+{
+public:
+
+  irisITKObjectMacro(Generic3DModel, AbstractModel)
+
+  // Special events
+  itkEventMacro(SprayPaintEvent, IRISEvent)
+  itkEventMacro(ScalpelEvent, IRISEvent)
+  FIRES(SprayPaintEvent)
+  FIRES(ScalpelEvent)
+  FIRES(StateMachineChangeEvent)
+
+  // Matrix for various transforms
+  typedef vnl_matrix_fixed<double, 4, 4> Mat4d;
+
+  Generic3DModel();
+
+  // States pertaining to this model
+  enum UIState {
+    UIF_MESH_DIRTY = 0,
+    UIF_MESH_ACTION_PENDING,
+    UIF_MESH_EXTERNAL,
+    UIF_CAMERA_STATE_SAVED,
+    UIF_MULTIPLE_MESHES,
+    UIF_FLIP_ENABLED,
+  };
+
+  // State of scalpel drawging
+  enum ScalpelStatus {
+    SCALPEL_LINE_NULL = 0,
+    SCALPEL_LINE_STARTED,
+    SCALPEL_LINE_COMPLETED
+  };
+
+  // Descriptor information for the selected mesh layer model
+  struct SelectedLayerDescriptor
+  {
+    bool External;
+    std::string Name;
+    bool operator == (const SelectedLayerDescriptor &other) const;
+    bool operator != (const SelectedLayerDescriptor &other) const;
+  };
+  using SelectedLayerDomain = SimpleItemSetDomain<unsigned long, SelectedLayerDescriptor>;
+
+  // Enum for what the camera focuses on
+  enum FocalPointTarget
+  {
+    FOCAL_POINT_CURSOR = 0, FOCAL_POINT_MAIN_IMAGE_CENTER, FOCAL_POINT_ACTIVE_MESH_LAYER_CENTER
+  };
+
+  using FocalPointTargetDomain = SimpleItemSetDomain<FocalPointTarget, FocalPointTarget>;
+
+  // Model for accessing the selected mesh layer
+  irisGenericPropertyAccessMacro(SelectedMeshLayer, unsigned long, SelectedLayerDomain);
+
+  // Model for focal point target selection
+  irisGenericPropertyAccessMacro(FocalPointTarget, FocalPointTarget, FocalPointTargetDomain);
+
+  // Set the parent model
+  void Initialize(GlobalUIModel *parent);
+
+  // Check the state
+  bool CheckState(UIState state);
+
+  // A flag indicating that the mesh should be continually updated
+  // TODO: replace this with an update in a background thread
+  irisSimplePropertyAccessMacro(ContinuousUpdate, bool)
+
+  // A flag indicating whether the user wants the color bar displayed
+  irisSimplePropertyAccessMacro(ColorBarEnabledByUser, bool)
+
+  // A flag indicating whether the color bar is actually displayed
+  irisReadOnlySimplePropertyAccessMacro(ColorBarVisible, bool)
+
+  // Tell the model to update the segmentation mesh
+  void UpdateSegmentationMesh(itk::Command *progressCmd);
+
+  // Reentrant function to check if mesh is being constructed in another thread
+  bool IsMeshUpdating();
+
+  // Accept the current drawing operation
+  bool AcceptAction();
+
+  // Cancel the current drawing operation
+  void CancelAction();
+
+  // Flip the direction of the normal for the scalpel operation
+  void FlipAction();
+
+  // Clear the rendering
+  void ClearRenderingAction();
+
+  // Position cursor at the screen position under the cursor
+  bool PickSegmentationVoxelUnderMouse(int px, int py);
+
+  // Add a spraypaint bubble at the screen position under the cursor
+  bool SpraySegmentationVoxelUnderMouse(int px, int py);
+
+  // Set the endpoints of the scalpel line
+  void SetScalpelStartPoint(int px, int py);
+  irisGetMacro(ScalpelStart, Vector2i)
+
+  // Set the endpoints of the scalpel line
+  void SetScalpelEndPoint(int px, int py, bool complete);
+  irisGetMacro(ScalpelEnd, Vector2i)
+
+  irisGetSetMacro(ScalpelStatus, ScalpelStatus)
+
+  // Get the parent model
+  irisGetMacro(ParentUI, GlobalUIModel *)
+
+  // Get the renderer
+  irisGetMacro(Renderer, Generic3DRenderer *)
+
+  // Get the driver
+  irisGetMacro(Driver, IRISApplication *)
+
+  // Get mesh layers
+  ImageMeshLayers *GetMeshLayers();
+
+  // Get the transform from image space to world coordinates
+  Mat4d &GetWorldMatrix();
+
+  // Get the center of rotation for the 3D window
+  Vector3d GetCenterOfRotation();
+
+  // Reset the viewpoint
+  void ResetView();
+
+  // Save the camera state
+  void SaveCameraState();
+
+  // Restore the camera state
+  void RestoreCameraState();
+
+  // Export the 3D model
+  void ExportMesh(const MeshExportSettings &settings);
+
+  // Get the spray points
+  vtkPolyData *GetSprayPoints() const;
+
+protected:
+
+  // Respond to updates
+  void OnUpdate() override;
+
+  // Do this when main image geometry has changed
+  void OnImageGeometryUpdate();
+
+  // Find the labeled voxel under the cursor
+  bool IntersectSegmentation(int vx, int vy, Vector3i &hit);
+
+  // Find the labeled voxels under the cursor within a radius
+  bool IntersectSegmentation(int vx, int vy, double v_radius, int n_samples, std::set<Vector3i> &hits);
+
+  // Parent (where the global UI state is stored)
+  GlobalUIModel *m_ParentUI;
+
+  // Renderer
+  SmartPtr<Generic3DRenderer> m_Renderer;
+
+  // Helps to have a pointer to the iris application
+  IRISApplication *m_Driver;
+
+  // World matrix - a copy of the NIFTI transform in the main image,
+  // updated on the event main image changes
+  Mat4d m_WorldMatrix, m_WorldMatrixInverse;
+
+  // Set of spraypainted points in image coordinates
+  vtkSmartPointer<vtkPolyData> m_SprayPoints;
+
+  // On-screen endpoints of the scalpel line
+  Vector2i m_ScalpelStart, m_ScalpelEnd;
+
+  // State of the scalpel drawing
+  ScalpelStatus m_ScalpelStatus;
+
+  // Selected layer model
+  using SelectedLayerModel = AbstractPropertyModel<unsigned long, SelectedLayerDomain>;
+  SmartPtr<SelectedLayerModel> m_SelectedMeshLayerModel;
+  bool GetSelectedMeshLayerValueAndRange(unsigned long &value, SelectedLayerDomain *domain);
+  void SetSelectedMeshLayerValue(unsigned long value);
+
+  // Focal point target model
+  using FocalPointTargetModel = ConcretePropertyModel<FocalPointTarget, FocalPointTargetDomain>;
+  SmartPtr<FocalPointTargetModel> m_FocalPointTargetModel;
+
+  // Continuous update model
+  SmartPtr<ConcreteSimpleBooleanProperty> m_ContinuousUpdateModel;
+
+  // Does user want a color bar?
+  SmartPtr<ConcreteSimpleBooleanProperty> m_ColorBarEnabledByUserModel;
+
+  // Is the color bar shown?
+  SmartPtr<AbstractSimpleBooleanProperty> m_ColorBarVisibleModel;
+  bool GetColorBarVisibleValue(bool &value);
+
+  // Is the mesh updating
+  bool m_MeshUpdating;
+
+  // Time of the last mesh clear operation
+  unsigned long m_ClearTime;
+
+  // A mutex to allow background processing of mesh updates
+  std::mutex m_Mutex;
+};
+
+#endif // GENERIC3DMODEL_H

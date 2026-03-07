@@ -1,0 +1,83 @@
+CMake Deprecation Warning at CMakeLists.txt:16 (cmake_policy):
+  The OLD behavior for policy CMP0080 will be removed from a future version
+  of CMake.
+
+  The cmake-policies(7) manual explains that the OLD behaviors of all
+  policies are deprecated and that a policy should be set to OLD only under
+  specific short-term circumstances.  Projects should be ported to the NEW
+  behavior and not rely on setting a policy to OLD.
+
+
+-- The C compiler identification is AppleClang 17.0.0.17000603
+-- The CXX compiler identification is AppleClang 17.0.0.17000603
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- ITK-SNAP Git Info:
+--   Branch : master
+--   SHA    : 97099054a61f1660ac75fe44610b80241d777026
+--   Date   : 2025-10-27 09:24:26 -0400
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Found OpenGL: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework  found components: OpenGL
+-- Found ZLIB: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/libz.tbd (found version "1.2.12")
+-- Found PNG: /opt/homebrew/lib/libpng.dylib (found version "1.6.54")
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Found OpenGL: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework
+-- Found WrapOpenGL: TRUE
+-- Could NOT find WrapVulkanHeaders (missing: Vulkan_INCLUDE_DIR) 
+CMake Warning at /opt/homebrew/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake:34 (find_package):
+  By not providing "FindWrapVulkanHeaders.cmake" in CMAKE_MODULE_PATH this
+  project has asked CMake to find a package configuration file provided by
+  "WrapVulkanHeaders", but CMake did not find one.
+
+  Could not find a package configuration file provided by "WrapVulkanHeaders"
+  with any of the following names:
+
+    WrapVulkanHeadersConfig.cmake
+    wrapvulkanheaders-config.cmake
+
+  Add the installation prefix of "WrapVulkanHeaders" to CMAKE_PREFIX_PATH or
+  set "WrapVulkanHeaders_DIR" to a directory containing one of the above
+  files.  If "WrapVulkanHeaders" provides a separate development package or
+  SDK, be sure it has been installed.
+Call Stack (most recent call first):
+  /opt/homebrew/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake:36 (_qt_internal_find_third_party_dependencies)
+  /opt/homebrew/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake:40 (include)
+  CMake/standalone.cmake:109 (FIND_PACKAGE)
+  CMakeLists.txt:155 (INCLUDE)
+
+
+-- Found CURL: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/libcurl.tbd (found version "8.7.1")
+-- LIBSSH include dir: /opt/homebrew/include
+-- LIBSSH library file: /opt/homebrew/lib/libssh.4.10.3.dylib
+-- CONVERT3D Version: 1.4.2 Released August 22, 2024
+-- GIT Info:
+--   Branch : 
+--   SHA    : d4d963629d7dfdca4b0607907f0e91827c22ea2a
+--   Date   : 
+-- GREEDY Version: 1.3.0-alpha Released Sep 28, 2022
+-- GIT Info:
+--   Branch : HEAD
+--   SHA    : 2d5dfa1891ac726524495d4ca8a3461be86c12f5
+--   Date   : 2025-03-19 09:03:08 -0400
+Configurating Greedy Propagation...
+-- === Installation Section ===
+--    CMAKE_SYSTEM_PROCESSOR arm64
+--    CMAKE_SYSTEM_NAME Darwin
+-- CPACK_BUNDLE_APPLE_CODESIGN_PARAMETER: 
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done (10.8s)
+-- Generating done (1.0s)
+-- Build files have been written to: /Users/bje/repos/itksnap-build-antigravity

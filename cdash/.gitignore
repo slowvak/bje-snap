@@ -1,0 +1,4 @@
+# Temp files
+*~
+.*.sw?
+.DS_Store

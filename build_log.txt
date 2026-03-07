@@ -1,0 +1,52 @@
+Building model Nightly at site antigravity-mac
+~/repos/cdash ~/repos
+Already up to date.
+~/repos
+==================== PRODUCT LIST ====================
+ --> itk v5.4.0 Nightly
+ --> vtk v9.3.1 Nightly
+ --> itksnap master Nightly
+==================================================
+PRODUCT itk BRANCH v5.4.0 MODEL Nightly
+==================================================
+--- CONFIG arm64rel ---
+-- CONFIG_EXT=
+Initial Cache:
+   BUILD_TESTING:BOOL=FALSE
+   BUILD_EXAMPLES:BOOL=FALSE
+   Module_MorphologicalContourInterpolation:BOOL=TRUE
+   MAKECOMMAND:STRING=/usr/bin/make -j 8
+   CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
+   CMAKE_BUILD_TYPE:STRING=Release
+   CMAKE_C_FLAGS:STRING=-mmacosx-version-min=11.0 -Wno-deprecated -Wno-implicit-function-declaration
+   CMAKE_CXX_FLAGS:STRING=-mmacosx-version-min=11.0 -Wno-deprecated -Wno-implicit-function-declaration --std=c++17
+   ARCH:STRING=arm64
+   CMAKE_OSX_ARCHITECTURES:STRING=arm64
+   BUILD_SHARED_LIBS:BOOL=ON
+   CMAKE_PREFIX_PATH:STRING=/opt/homebrew/lib/cmake/Qt6
+   CMAKE_GENERATOR:INTERNAL=Unix Makefiles
+   BUILDNAME:STRING=Darwin-25.2.0-v5.4.0-arm64rel
+   SITE:STRING=antigravity-mac
+   SCP_USERNAME:STRING=antigravity
+Running ctest_start
+Run dashboard with model Nightly
+   Source directory: /Users/bje/repos/Nightly/itk/v5.4.0/itk
+   Build directory: /Users/bje/repos/Nightly/itk/v5.4.0/arm64rel
+   Reading ctest configuration file: /Users/bje/repos/Nightly/itk/v5.4.0/itk/CTestConfig.cmake
+   Site: antigravity-mac
+   Build name: Darwin-25.2.0-v5.4.0-arm64rel
+Determine Nightly Start Time
+   Specified time: 1:00:00 UTC
+   Use Nightly tag: 20260205-0100
+Running ctest_update
+   Updating GIT repository: /Users/bje/repos/Nightly/itk/v5.4.0/itk
+   Old revision of repository is: 311b7060ef39e371f3cd209ec135284ff5fde735
+   New revision of repository is: 311b7060ef39e371f3cd209ec135284ff5fde735
+   Gathering version information (one . per revision):
+    
+   Update command failed: "/usr/bin/git" "fetch"
+UPDATE resulted in -1 updated files
+Running ctest_configure
+Configure project
+   Each . represents 1024 bytes of output
+    

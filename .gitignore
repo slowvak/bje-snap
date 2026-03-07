@@ -1,0 +1,5 @@
+itk-build/
+vtk-build/
+itksnap-build-antigravity/
+ITKMorphologicalContourInterpolation-build/
+.git_backup/

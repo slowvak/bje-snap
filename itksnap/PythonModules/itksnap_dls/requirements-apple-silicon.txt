@@ -1,0 +1,16 @@
+# Apple Silicon (MPS) dependencies for itksnap-dls
+# Install with: pip install -r requirements-apple-silicon.txt
+
+# PyTorch with MPS support (Apple Silicon GPU)
+torch<=2.8.0
+torchaudio<=2.8.0
+torchvision
+
+# MLX for accelerated pre/post-processing on Apple Silicon
+mlx
+mlx-nn
+
+# Core dependencies
+fastapi[standard]
+nnInteractive
+huggingface_hub

@@ -1,0 +1,51 @@
+Building model Nightly at site antigravity-mac
+~/repos/cdash ~/repos
+Already up to date.
+~/repos
+==================== PRODUCT LIST ====================
+ --> vtk v9.3.1 Nightly
+==================================================
+PRODUCT vtk BRANCH v9.3.1 MODEL Nightly
+==================================================
+--- CONFIG arm64rel ---
+GIT COMMAND: sh -c "/usr/bin/git clone https://github.com/Kitware/VTK.git vtk && cd vtk && /usr/bin/git checkout v9.3.1"
+Initial Cache:
+   BUILD_TESTING:BOOL=FALSE
+   BUILD_EXAMPLES:BOOL=FALSE
+   BUILD_SHARED_LIBS:BOOL=FALSE
+   VTK_REQUIRED_OBJCXX_FLAGS:STRING=
+   VTK_GROUP_ENABLE_Qt:STRING=YES
+   VTK_MODULE_ENABLE_VTK_GUISupportQtQuick:STRING=NO
+   VTK_MODULE_ENABLE_VTK_GUISupportQtSQL:STRING=NO
+   VTK_MODULE_ENABLE_VTK_RenderingExternal:STRING=WANT
+   MAKECOMMAND:STRING=/usr/bin/make -j 8
+   CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
+   CMAKE_BUILD_TYPE:STRING=Release
+   CMAKE_C_FLAGS:STRING=-mmacosx-version-min=11.0 -Wno-deprecated -Wno-implicit-function-declaration
+   CMAKE_CXX_FLAGS:STRING=-mmacosx-version-min=11.0 -Wno-deprecated -Wno-implicit-function-declaration --std=c++17
+   ARCH:STRING=arm64
+   CMAKE_OSX_ARCHITECTURES:STRING=arm64
+   BUILD_SHARED_LIBS:BOOL=ON
+   CMAKE_PREFIX_PATH:STRING=/opt/homebrew/lib/cmake/Qt6
+   VTK_MODULE_USE_EXTERNAL_VTK_zlib:BOOL=ON
+   VTK_MODULE_ENABLE_VTK_RenderingExternal:STRING=YES
+   CMAKE_GENERATOR:INTERNAL=Unix Makefiles
+   BUILDNAME:STRING=Darwin-25.2.0-v9.3.1-arm64rel
+   SITE:STRING=antigravity-mac
+   SCP_USERNAME:STRING=antigravity
+Running ctest_start
+Run dashboard with model Nightly
+   Source directory: /Users/bje/repos/Nightly/vtk/v9.3.1/vtk
+   Build directory: /Users/bje/repos/Nightly/vtk/v9.3.1/arm64rel
+   First perform the initial checkout: sh -c "/usr/bin/git clone https://github.com/Kitware/VTK.git vtk && cd vtk && /usr/bin/git checkout v9.3.1"
+   Perform checkout in directory: /Users/bje/repos/Nightly/vtk/v9.3.1
+   Reading ctest configuration file: /Users/bje/repos/Nightly/vtk/v9.3.1/vtk/CTestConfig.cmake
+   Site: antigravity-mac
+   Build name: Darwin-25.2.0-v9.3.1-arm64rel
+Determine Nightly Start Time
+   Specified time: 01:00:00 UTC
+   Use Nightly tag: 20260205-0100
+Running ctest_update
+   Updating GIT repository: /Users/bje/repos/Nightly/vtk/v9.3.1/vtk
+   Old revision of repository is: 4f02ae83179c6a1542ac3c335c73dea976578c63
+   New revision of repository is: 4f02ae83179c6a1542ac3c335c73dea976578c63

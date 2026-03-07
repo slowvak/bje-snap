@@ -1,0 +1,12 @@
+# Standard/CUDA dependencies for itksnap-dls
+# Install with: pip install -r requirements.txt
+
+# PyTorch with CUDA support
+torch<=2.8.0
+torchaudio<=2.8.0
+torchvision
+
+# Core dependencies
+fastapi[standard]
+nnInteractive
+huggingface_hub
