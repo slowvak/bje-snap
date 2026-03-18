@@ -12,6 +12,7 @@
 #include "GenericImageData.h"
 #include "ImageWrapperBase.h"
 #include "MetaDataAccess.h"
+#include "SegmentationUpdateIterator.h"
 
 #include <QtActionGroupCoupling.h>
 #include <QActionGroup>
@@ -122,6 +123,7 @@ MainControlPanel::MainControlPanel(MainImageWindow *parent) :
 
   // Add a shortcut for the button
   ui->btnLabelSelector->setShortcut(QKeySequence("l"));
+  ui->btnClearMask->setShortcut(QKeySequence("c"));
   LabelSelectionButtonPopupMenu *ls_menu = new LabelSelectionButtonPopupMenu(this);
   ui->btnLabelSelector->setMenu(ls_menu);
   ui->btnLabelSelector->setPopupMode(QToolButton::InstantPopup);
@@ -311,6 +313,73 @@ void MainControlPanel::on_btnCTLung_clicked()
 void MainControlPanel::on_btnCTBone_clicked()
 {
   applyCTPreset(-1000, 4000);
+}
+
+void MainControlPanel::on_btnClearMask_clicked()
+{
+  if(!m_Model)
+    return;
+
+  IRISApplication *driver = m_Model->GetDriver();
+  LabelImageWrapper *seg = driver->GetSelectedSegmentationLayer();
+  if(!seg || !seg->IsInitialized())
+    return;
+
+  // Build a region covering the entire current axial (z) slice
+  Vector3ui cursorPos = driver->GetCursorPosition();
+  Vector3ui volSize = seg->GetSize();
+
+  itk::Index<3> idx;
+  idx[0] = 0;
+  idx[1] = 0;
+  idx[2] = static_cast<itk::Index<3>::IndexValueType>(cursorPos[2]);
+
+  itk::Size<3> sz;
+  sz[0] = volSize[0];
+  sz[1] = volSize[1];
+  sz[2] = 1;
+
+  itk::ImageRegion<3> sliceRegion(idx, sz);
+
+  // Zero out every voxel in the slice (PAINT_OVER_ALL ignores draw-over filter)
+  SegmentationUpdateIterator it(seg, sliceRegion, 0, DrawOverFilter(PAINT_OVER_ALL, 0));
+  for(; !it.IsAtEnd(); ++it)
+    it.PaintLabel(0);
+
+  if(it.Finalize("Clear Mask"))
+    driver->InvokeEvent(SegmentationChangeEvent());
+}
+
+void MainControlPanel::on_btnClearVolumeMask_clicked()
+{
+  if(!m_Model)
+    return;
+
+  IRISApplication *driver = m_Model->GetDriver();
+  LabelImageWrapper *seg = driver->GetSelectedSegmentationLayer();
+  if(!seg || !seg->IsInitialized())
+    return;
+
+  // Build a region covering the entire volume
+  Vector3ui volSize = seg->GetSize();
+
+  itk::Index<3> idx;
+  idx[0] = 0; idx[1] = 0; idx[2] = 0;
+
+  itk::Size<3> sz;
+  sz[0] = volSize[0];
+  sz[1] = volSize[1];
+  sz[2] = volSize[2];
+
+  itk::ImageRegion<3> fullRegion(idx, sz);
+
+  // Zero out every voxel in the entire volume
+  SegmentationUpdateIterator it(seg, fullRegion, 0, DrawOverFilter(PAINT_OVER_ALL, 0));
+  for(; !it.IsAtEnd(); ++it)
+    it.PaintLabel(0);
+
+  if(it.Finalize("Clear Volume Mask"))
+    driver->InvokeEvent(SegmentationChangeEvent());
 }
 
 MainControlPanel::~MainControlPanel()

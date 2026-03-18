@@ -84,7 +84,7 @@ QMenu
    <item>
     <widget class="QWidget" name="widgetMain" native="true">
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">background-color: white;</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_15">
       <property name="spacing">
@@ -835,6 +835,26 @@ QToolButton {
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnClearMask">
+        <property name="text">
+         <string>Clear Mask (Slice)</string>
+        </property>
+        <property name="toolTip">
+         <string>Set all segmentation labels on the current axial slice to zero [c]</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnClearVolumeMask">
+        <property name="text">
+         <string>Clear Volume Mask</string>
+        </property>
+        <property name="toolTip">
+         <string>Set all segmentation labels in the entire volume to zero</string>
+        </property>
        </widget>
       </item>
       <item>

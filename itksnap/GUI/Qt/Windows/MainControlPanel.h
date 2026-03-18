@@ -37,6 +37,9 @@ private slots:
   void on_btnCTLung_clicked();
   void on_btnCTBone_clicked();
 
+  void on_btnClearMask_clicked();
+  void on_btnClearVolumeMask_clicked();
+
   void on_btnCursorInspector_clicked(bool checked);
 
   void on_btnZoomInspector_clicked(bool checked);
